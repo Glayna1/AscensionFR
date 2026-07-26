@@ -1,0 +1,1 @@
+Temporary CI trigger for collaboration-platform lockfile generation. This file will be removed after validation.
