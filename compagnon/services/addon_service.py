@@ -48,10 +48,13 @@ def proposer(owner_id: str, slug: str, name: str, description: str,
     return client().table("addons").insert(payload).execute().data
 
 
-def soumettre(addon_id: str, owner_id: str) -> None:
-    # L'owner ne peut passer que son propre draft/rejected à pending.
-    response = client().table("addons").update({"status": "pending"}).eq(
-        "id", addon_id
-    ).eq("owner_id", owner_id).in_("status", ["draft", "rejected"]).execute()
-    if not response.data:
-        raise RuntimeError("Addon introuvable ou non soumettable.")
+def soumettre(addon_id: str) -> None:
+    client().rpc("submit_addon", {"p_addon_id": addon_id}).execute()
+
+
+def reviewer(addon_id: str, approve: bool, note: str | None = None) -> None:
+    client().rpc("review_addon", {
+        "p_addon_id": addon_id,
+        "p_approve": bool(approve),
+        "p_note": note,
+    }).execute()
