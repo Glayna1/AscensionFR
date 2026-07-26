@@ -3,13 +3,14 @@
 Point d'entrée du HUB AscensionFR (interface v3, paysage).
 ==========================================================
 Le Hub est le successeur en chantier du Compagnon : même moteur
-(`compagnon.py`), nouvelle interface « fenêtre World of Warcraft »
-(`interface_hub.py`). Tant qu'il n'est pas distribué, l'exe de release
-reste le Compagnon v2 (voir README_COMPAGNON.md).
+(`compagnon.py`), interface « fenêtre World of Warcraft »
+(`interface_hub.py`) étendue par `interface_hub_collaboration.py` pour les
+fonctions communautaires Supabase. Sans configuration Supabase, les fonctions
+historiques restent disponibles.
 
 Essai : `python compagnon_hub.py`
 """
-from interface_hub import main
+from interface_hub_collaboration import main
 
 if __name__ == "__main__":
     main()
