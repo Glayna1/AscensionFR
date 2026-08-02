@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <meta name="description" content="Recherche publique et registre des propositions de traduction AscensionFR.">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; img-src 'self' https://avatars.githubusercontent.com data:; style-src 'self'; script-src 'self'; base-uri 'none'; form-action https://github.com; frame-ancestors 'none'">
-  <title>AscensionFR — Recherche et contributions publiques</title>
+  <meta name="description" content="Observatoire public et en lecture seule des changements AscensionFR sur GitHub.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; img-src 'self' https://avatars.githubusercontent.com data:; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+  <title>AscensionFR — Observatoire public GitHub</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,16 +15,16 @@
   <header class="hero">
     <div class="hero__glow" aria-hidden="true"></div>
     <div class="shell hero__content">
-      <p class="eyebrow">ASCENSIONFR · DONNÉES PUBLIQUES GITHUB</p>
-      <h1>Rechercher, comparer, voter.</h1>
+      <p class="eyebrow">ASCENSIONFR · LECTURE SEULE · SOURCE GITHUB</p>
+      <h1>Rechercher, comparer, vérifier.</h1>
       <p class="hero__lead">
-        Chaque catégorie vient du nom réel d’un fichier JSON. Chaque proposition affiche
-        l’avant, l’après et le moindre mot ajouté, retiré ou remplacé. L’auteur, les votes,
-        les discussions et la décision restent publics sur GitHub.
+        Rien ne peut être modifié depuis cette page. Elle lit uniquement les données publiques
+        de GitHub et montre chaque ajout, modification ou suppression, jusqu’au mot changé,
+        avec l’auteur du commit et les votes ou revues GitHub associés lorsqu’ils existent.
       </p>
       <div class="hero__links" aria-label="Liens du projet">
-        <a class="button button--primary" href="https://github.com/LePetitDan/AscensionFR-Textes" rel="noreferrer">Voir les textes sur GitHub</a>
-        <a class="button button--ghost" href="#registre">Voir le registre public</a>
+        <a class="button button--primary" href="https://github.com/LePetitDan/AscensionFR-Textes" rel="noreferrer">Ouvrir le dépôt des textes</a>
+        <a class="button button--ghost" href="#historique">Voir l’historique public</a>
       </div>
     </div>
   </header>
@@ -62,88 +62,42 @@
     </section>
 
     <aside class="panel transparency" aria-labelledby="transparency-title">
-      <p class="section-kicker">AUCUNE BOÎTE NOIRE</p>
-      <h2 id="transparency-title">Ce qui est public</h2>
+      <p class="section-kicker">AUCUNE ÉCRITURE</p>
+      <h2 id="transparency-title">Ce que cette page fait</h2>
       <ol class="audit-list">
-        <li><strong>La source</strong><span>Fichier, chemin JSON et empreinte GitHub exacte.</span></li>
-        <li><strong>La comparaison</strong><span>Ajout, modification ou suppression, mot par mot et caractère par caractère.</span></li>
-        <li><strong>La personne</strong><span>Compte GitHub de l’auteur de la proposition.</span></li>
-        <li><strong>Les votes</strong><span>Réactions +1 et −1, avec la liste publique des comptes.</span></li>
-        <li><strong>La décision</strong><span>Issue, discussion, pull request et commit restent consultables.</span></li>
+        <li><strong>Lit la source</strong><span>Fichier, chemin JSON et empreinte GitHub exacte.</span></li>
+        <li><strong>Compare les versions</strong><span>Avant/après, ajout, modification ou suppression, mot par mot.</span></li>
+        <li><strong>Identifie l’auteur</strong><span>Compte GitHub ou identité enregistrée dans le commit.</span></li>
+        <li><strong>Affiche les votes</strong><span>Réactions et revues GitHub, avec les comptes publics concernés.</span></li>
+        <li><strong>Ne modifie rien</strong><span>Aucun formulaire d’édition, aucune proposition, aucun vote depuis le site.</span></li>
       </ol>
-      <p class="privacy-note">Ce site n’utilise ni compte interne, ni base privée, ni suivi publicitaire.</p>
+      <p class="privacy-note">Aucun compte interne, aucune base privée, aucun jeton GitHub embarqué et aucun suivi publicitaire.</p>
     </aside>
 
-    <section id="registre" class="panel panel--registry" aria-labelledby="registry-title">
+    <section id="historique" class="panel panel--registry" aria-labelledby="history-title">
       <div class="section-heading">
         <div>
-          <p class="section-kicker">ISSUES GITHUB</p>
-          <h2 id="registry-title">Registre public des propositions</h2>
+          <p class="section-kicker">COMMITS GITHUB</p>
+          <h2 id="history-title">Historique public des changements</h2>
         </div>
-        <button id="refresh-proposals" class="button button--ghost button--small" type="button">Actualiser</button>
+        <button id="refresh-history" class="button button--ghost button--small" type="button">Actualiser</button>
       </div>
       <p class="registry-intro">
-        Les votes sont les réactions GitHub. Cliquer sur « Voir les votants » affiche les comptes ayant voté pour ou contre.
+        Ouvre un commit pour recalculer les différences JSON exactes. Le bouton « Votes et revues » recherche la pull request associée et affiche publiquement qui a approuvé, demandé des changements ou réagi.
       </p>
-      <div id="proposals-state" class="inline-state" role="status">Chargement du registre…</div>
-      <div id="proposals" class="proposal-list" aria-live="polite"></div>
+      <div id="history-state" class="inline-state" role="status">Chargement de l’historique…</div>
+      <div id="history" class="proposal-list" aria-live="polite"></div>
     </section>
   </main>
 
-  <dialog id="proposal-dialog" class="proposal-dialog" aria-labelledby="proposal-title">
-    <form id="proposal-form" method="dialog">
-      <div class="dialog-header">
-        <div>
-          <p class="section-kicker">PROPOSITION PUBLIQUE</p>
-          <h2 id="proposal-title">Comparer une correction</h2>
-        </div>
-        <button class="icon-button" type="button" data-close-dialog aria-label="Fermer">×</button>
-      </div>
-
-      <dl class="source-meta">
-        <div><dt>Catégorie</dt><dd id="proposal-category"></dd></div>
-        <div><dt>Chemin JSON</dt><dd id="proposal-path"></dd></div>
-        <div><dt>Empreinte source</dt><dd id="proposal-sha"></dd></div>
-      </dl>
-
-      <label class="field">
-        <span>Texte actuel</span>
-        <textarea id="before-value" rows="5" readonly></textarea>
-      </label>
-      <label class="field">
-        <span>Nouvelle valeur</span>
-        <textarea id="after-value" rows="5"></textarea>
-      </label>
-      <label class="field">
-        <span>Pourquoi ce changement ?</span>
-        <textarea id="reason" rows="3" required placeholder="Contresens, orthographe, traduction officielle, cohérence…"></textarea>
-      </label>
-
-      <section class="diff-card" aria-labelledby="diff-title">
-        <div class="diff-card__header">
-          <h3 id="diff-title">Diff exact</h3>
-          <span id="operation-badge" class="operation-badge">Modification</span>
-        </div>
-        <p id="diff-summary" class="diff-summary"></p>
-        <div id="diff-output" class="diff-output"></div>
-      </section>
-
-      <p id="proposal-warning" class="form-warning" role="alert"></p>
-      <div class="dialog-actions">
-        <button class="button button--ghost" type="button" data-close-dialog>Annuler</button>
-        <button id="open-issue" class="button button--primary" type="submit" value="default">Publier sur GitHub</button>
-      </div>
-    </form>
-  </dialog>
-
   <footer class="footer">
     <div class="shell footer__content">
-      <p>AscensionFR · Toute proposition et tout vote passent par GitHub.</p>
+      <p>AscensionFR · Observatoire public, strictement en lecture seule.</p>
       <a href="https://github.com/LePetitDan/AscensionFR" rel="noreferrer">Code source</a>
     </div>
   </footer>
 
-  <noscript>JavaScript est nécessaire pour lire les JSON publics et construire les comparaisons.</noscript>
+  <noscript>JavaScript est nécessaire pour lire les JSON et l’historique publics de GitHub.</noscript>
   <script src="app.js" defer></script>
 </body>
 </html>
