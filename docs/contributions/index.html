@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Recherche publique et registre des propositions de traduction AscensionFR.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; img-src 'self' https://avatars.githubusercontent.com data:; style-src 'self'; script-src 'self'; base-uri 'none'; form-action https://github.com; frame-ancestors 'none'">
+  <title>AscensionFR — Recherche et contributions publiques</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#recherche">Aller à la recherche</a>
+
+  <header class="hero">
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="shell hero__content">
+      <p class="eyebrow">ASCENSIONFR · DONNÉES PUBLIQUES GITHUB</p>
+      <h1>Rechercher, comparer, voter.</h1>
+      <p class="hero__lead">
+        Chaque catégorie vient du nom réel d’un fichier JSON. Chaque proposition affiche
+        l’avant, l’après et le moindre mot ajouté, retiré ou remplacé. L’auteur, les votes,
+        les discussions et la décision restent publics sur GitHub.
+      </p>
+      <div class="hero__links" aria-label="Liens du projet">
+        <a class="button button--primary" href="https://github.com/LePetitDan/AscensionFR-Textes" rel="noreferrer">Voir les textes sur GitHub</a>
+        <a class="button button--ghost" href="#registre">Voir le registre public</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell main-grid">
+    <section id="recherche" class="panel panel--search" aria-labelledby="search-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">TEXTES PUBLICS</p>
+          <h2 id="search-title">Recherche par nom et par catégorie</h2>
+        </div>
+        <span id="catalogue-state" class="status-pill" role="status">Chargement des catégories…</span>
+      </div>
+
+      <form id="search-form" class="search-form" novalidate>
+        <label class="field field--wide">
+          <span>Nom, texte, clé ou ID</span>
+          <input id="query" type="search" autocomplete="off" spellcheck="false" placeholder="Ex. Shadow Bolt, trait de l’ombre, 686…">
+        </label>
+        <label class="field">
+          <span>Catégorie</span>
+          <select id="category" disabled>
+            <option value="">Chargement…</option>
+          </select>
+        </label>
+        <button id="search-button" class="button button--primary search-submit" type="submit" disabled>Rechercher</button>
+      </form>
+
+      <div class="search-meta">
+        <p id="search-state" role="status">Les catégories sont lues directement dans <code>traductions/*.json</code>.</p>
+        <button id="clear-button" class="text-button" type="button" hidden>Effacer la recherche</button>
+      </div>
+
+      <div id="results" class="results" aria-live="polite"></div>
+    </section>
+
+    <aside class="panel transparency" aria-labelledby="transparency-title">
+      <p class="section-kicker">AUCUNE BOÎTE NOIRE</p>
+      <h2 id="transparency-title">Ce qui est public</h2>
+      <ol class="audit-list">
+        <li><strong>La source</strong><span>Fichier, chemin JSON et empreinte GitHub exacte.</span></li>
+        <li><strong>La comparaison</strong><span>Ajout, modification ou suppression, mot par mot et caractère par caractère.</span></li>
+        <li><strong>La personne</strong><span>Compte GitHub de l’auteur de la proposition.</span></li>
+        <li><strong>Les votes</strong><span>Réactions +1 et −1, avec la liste publique des comptes.</span></li>
+        <li><strong>La décision</strong><span>Issue, discussion, pull request et commit restent consultables.</span></li>
+      </ol>
+      <p class="privacy-note">Ce site n’utilise ni compte interne, ni base privée, ni suivi publicitaire.</p>
+    </aside>
+
+    <section id="registre" class="panel panel--registry" aria-labelledby="registry-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">ISSUES GITHUB</p>
+          <h2 id="registry-title">Registre public des propositions</h2>
+        </div>
+        <button id="refresh-proposals" class="button button--ghost button--small" type="button">Actualiser</button>
+      </div>
+      <p class="registry-intro">
+        Les votes sont les réactions GitHub. Cliquer sur « Voir les votants » affiche les comptes ayant voté pour ou contre.
+      </p>
+      <div id="proposals-state" class="inline-state" role="status">Chargement du registre…</div>
+      <div id="proposals" class="proposal-list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <dialog id="proposal-dialog" class="proposal-dialog" aria-labelledby="proposal-title">
+    <form id="proposal-form" method="dialog">
+      <div class="dialog-header">
+        <div>
+          <p class="section-kicker">PROPOSITION PUBLIQUE</p>
+          <h2 id="proposal-title">Comparer une correction</h2>
+        </div>
+        <button class="icon-button" type="button" data-close-dialog aria-label="Fermer">×</button>
+      </div>
+
+      <dl class="source-meta">
+        <div><dt>Catégorie</dt><dd id="proposal-category"></dd></div>
+        <div><dt>Chemin JSON</dt><dd id="proposal-path"></dd></div>
+        <div><dt>Empreinte source</dt><dd id="proposal-sha"></dd></div>
+      </dl>
+
+      <label class="field">
+        <span>Texte actuel</span>
+        <textarea id="before-value" rows="5" readonly></textarea>
+      </label>
+      <label class="field">
+        <span>Nouvelle valeur</span>
+        <textarea id="after-value" rows="5"></textarea>
+      </label>
+      <label class="field">
+        <span>Pourquoi ce changement ?</span>
+        <textarea id="reason" rows="3" required placeholder="Contresens, orthographe, traduction officielle, cohérence…"></textarea>
+      </label>
+
+      <section class="diff-card" aria-labelledby="diff-title">
+        <div class="diff-card__header">
+          <h3 id="diff-title">Diff exact</h3>
+          <span id="operation-badge" class="operation-badge">Modification</span>
+        </div>
+        <p id="diff-summary" class="diff-summary"></p>
+        <div id="diff-output" class="diff-output"></div>
+      </section>
+
+      <p id="proposal-warning" class="form-warning" role="alert"></p>
+      <div class="dialog-actions">
+        <button class="button button--ghost" type="button" data-close-dialog>Annuler</button>
+        <button id="open-issue" class="button button--primary" type="submit" value="default">Publier sur GitHub</button>
+      </div>
+    </form>
+  </dialog>
+
+  <footer class="footer">
+    <div class="shell footer__content">
+      <p>AscensionFR · Toute proposition et tout vote passent par GitHub.</p>
+      <a href="https://github.com/LePetitDan/AscensionFR" rel="noreferrer">Code source</a>
+    </div>
+  </footer>
+
+  <noscript>JavaScript est nécessaire pour lire les JSON publics et construire les comparaisons.</noscript>
+  <script src="app.js" defer></script>
+</body>
+</html>
