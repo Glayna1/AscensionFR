@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="Observatoire public et en lecture seule des changements AscensionFR sur GitHub.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https://api.github.com https://raw.githubusercontent.com; img-src 'self' https://avatars.githubusercontent.com data:; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'">
+  <title>AscensionFR — Observatoire public GitHub</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="readonly.css">
+</head>
+<body>
+  <a class="skip-link" href="#recherche">Aller à la recherche</a>
+
+  <header class="hero">
+    <div class="hero__glow" aria-hidden="true"></div>
+    <div class="shell hero__content">
+      <p class="eyebrow">ASCENSIONFR · LECTURE SEULE · SOURCE GITHUB</p>
+      <h1>Rechercher, comparer, vérifier.</h1>
+      <p class="hero__lead">
+        Rien ne peut être modifié depuis cette page. Elle lit uniquement les données publiques
+        de GitHub et montre chaque ajout, modification ou suppression, jusqu’au mot changé,
+        avec l’auteur du commit et les votes ou revues GitHub associés lorsqu’ils existent.
+      </p>
+      <div class="hero__links" aria-label="Liens du projet">
+        <a class="button button--primary" href="https://github.com/LePetitDan/AscensionFR-Textes" rel="noreferrer">Ouvrir le dépôt des textes</a>
+        <a class="button button--ghost" href="#historique">Voir l’historique public</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell main-grid">
+    <section id="recherche" class="panel panel--search" aria-labelledby="search-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">TEXTES PUBLICS</p>
+          <h2 id="search-title">Recherche par nom et par catégorie</h2>
+        </div>
+        <span id="catalogue-state" class="status-pill" role="status">Chargement des catégories…</span>
+      </div>
+
+      <form id="search-form" class="search-form" novalidate>
+        <label class="field field--wide">
+          <span>Nom, texte, clé ou ID</span>
+          <input id="query" type="search" autocomplete="off" spellcheck="false" placeholder="Ex. Shadow Bolt, trait de l’ombre, 686…">
+        </label>
+        <label class="field">
+          <span>Catégorie</span>
+          <select id="category" disabled>
+            <option value="">Chargement…</option>
+          </select>
+        </label>
+        <button id="search-button" class="button button--primary search-submit" type="submit" disabled>Rechercher</button>
+      </form>
+
+      <div class="search-meta">
+        <p id="search-state" role="status">Les catégories sont lues directement dans <code>traductions/*.json</code>.</p>
+        <button id="clear-button" class="text-button" type="button" hidden>Effacer la recherche</button>
+      </div>
+
+      <div id="results" class="results" aria-live="polite"></div>
+    </section>
+
+    <aside class="panel transparency" aria-labelledby="transparency-title">
+      <p class="section-kicker">AUCUNE ÉCRITURE</p>
+      <h2 id="transparency-title">Ce que cette page fait</h2>
+      <ol class="audit-list">
+        <li><strong>Lit la source</strong><span>Fichier, chemin JSON et empreinte GitHub exacte.</span></li>
+        <li><strong>Compare les versions</strong><span>Avant/après, ajout, modification ou suppression, mot par mot.</span></li>
+        <li><strong>Identifie l’auteur</strong><span>Compte GitHub ou identité enregistrée dans le commit.</span></li>
+        <li><strong>Affiche les votes</strong><span>Réactions et revues GitHub, avec les comptes publics concernés.</span></li>
+        <li><strong>Ne modifie rien</strong><span>Aucun formulaire d’édition, aucune proposition, aucun vote depuis le site.</span></li>
+      </ol>
+      <p class="privacy-note">Aucun compte interne, aucune base privée, aucun jeton GitHub embarqué et aucun suivi publicitaire.</p>
+    </aside>
+
+    <section id="historique" class="panel panel--registry" aria-labelledby="history-title">
+      <div class="section-heading">
+        <div>
+          <p class="section-kicker">COMMITS GITHUB</p>
+          <h2 id="history-title">Historique public des changements</h2>
+        </div>
+        <button id="refresh-history" class="button button--ghost button--small" type="button">Actualiser</button>
+      </div>
+      <p class="registry-intro">
+        Ouvre un commit pour recalculer les différences JSON exactes. Le bouton « Votes et revues » recherche la pull request associée et affiche publiquement qui a approuvé, demandé des changements ou réagi.
+      </p>
+      <div id="history-state" class="inline-state" role="status">Chargement de l’historique…</div>
+      <div id="history" class="proposal-list" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell footer__content">
+      <p>AscensionFR · Observatoire public, strictement en lecture seule.</p>
+      <a href="https://github.com/LePetitDan/AscensionFR" rel="noreferrer">Code source</a>
+    </div>
+  </footer>
+
+  <noscript>JavaScript est nécessaire pour lire les JSON et l’historique publics de GitHub.</noscript>
+  <script src="app.js" defer></script>
+</body>
+</html>
