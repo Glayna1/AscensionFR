@@ -1,14 +1,18 @@
-# Registre public des contributions AscensionFR
+# Observatoire public AscensionFR
 
-Cette page statique fournit :
+Cette page statique est **strictement en lecture seule**. Elle ne permet ni de modifier un texte, ni de créer une proposition, ni de voter.
+
+Elle fournit :
 
 - une recherche par nom, texte, clé ou ID ;
 - un filtre par catégorie, dont le nom est exactement le nom du fichier JSON ;
+- l’historique GitHub d’une valeur précise ;
 - une comparaison avant/après mot à mot ;
 - la qualification automatique `ajout`, `modification` ou `suppression` ;
-- la création d’une issue publique dans `LePetitDan/AscensionFR-Textes` ;
-- un registre public des issues, auteurs, votes positifs et votes négatifs ;
-- l’affichage public des comptes GitHub ayant voté.
+- le nombre de mots ajoutés et retirés ;
+- l’auteur et la date de chaque commit ;
+- les pull requests associées aux commits ;
+- les réactions et revues GitHub publiques, avec les comptes concernés.
 
 ## Source de vérité
 
@@ -18,32 +22,45 @@ Le navigateur découvre les catégories avec l’API publique GitHub, dans :
 LePetitDan/AscensionFR-Textes/traductions/*.json
 ```
 
-Aucune liste de catégories n’est recopiée dans le code. Ajouter ou retirer un fichier JSON met donc automatiquement le filtre à jour.
+Aucune liste de catégories n’est recopiée dans le code. Ajouter ou retirer un fichier JSON met automatiquement le filtre à jour.
 
-## Traçabilité d’une proposition
+## Comparaison exacte
 
-Chaque issue générée contient :
+Pour un commit, la page récupère publiquement :
 
-1. le dépôt, la branche et le fichier ;
-2. le chemin JSON exact ;
-3. l’empreinte Git du fichier source ;
-4. la valeur avant ;
-5. la valeur après ;
-6. le diff mot à mot ;
-7. le nombre de mots ajoutés et retirés ;
-8. le motif du contributeur ;
-9. un bloc machine lisible `ascensionfr-proposal:v1`.
+1. son parent Git ;
+2. les fichiers JSON avant le commit ;
+3. les mêmes fichiers après le commit ;
+4. toutes les valeurs primitives de chaque JSON ;
+5. le chemin exact de chaque valeur différente ;
+6. l’opération effectuée : ajout, modification ou suppression ;
+7. le diff mot à mot entre l’ancienne et la nouvelle valeur.
 
-Les votes utilisent les réactions GitHub `+1` et `-1`. GitHub conserve publiquement l’identité des comptes ayant réagi.
+Un changement d’un seul mot est donc affiché comme tel. Les très gros commits sont affichés par lots, mais tous leurs changements restent consultables.
 
-## Absence de serveur privé
+## Votes et revues
 
-Le site est entièrement statique. Il ne possède :
+Lorsqu’un commit est associé à une pull request publique, la page affiche en lecture seule :
 
-- ni base de données ;
-- ni compte local ;
-- ni jeton GitHub embarqué ;
-- ni collecte analytique ;
-- ni canal de contribution privé.
+- les réactions `+1` et `-1` ;
+- les comptes ayant réagi ;
+- les revues `APPROVED` ;
+- les revues `CHANGES_REQUESTED` ;
+- les commentaires de revue.
 
-La publication d’une proposition et d’un vote exige un compte GitHub, afin que l’auteur et le votant soient identifiables publiquement.
+Lorsqu’un commit a été poussé directement sans pull request, la page l’indique clairement : aucun vote public ne peut alors lui être attribué.
+
+## Absence d’écriture et de serveur privé
+
+Le site ne possède :
+
+- aucun formulaire d’édition ;
+- aucun bouton de proposition ;
+- aucun bouton de vote ;
+- aucune base de données ;
+- aucun compte local ;
+- aucun jeton GitHub embarqué ;
+- aucune collecte analytique ;
+- aucun canal privé de contribution.
+
+Toutes les informations affichées viennent des API et fichiers publics de GitHub.
